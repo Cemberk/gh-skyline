@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Skyline - 3D Print Your Contributions</title>
+    <meta name="description" content="Generate a 3D-printable STL file of your GitHub contribution graph directly in your browser">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏔️ GitHub Skyline</h1>
+            <p class="subtitle">Generate a 3D-printable STL file of your GitHub contribution graph</p>
+        </header>
+
+        <main>
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="form-group">
+                    <label for="username">GitHub Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        placeholder="e.g., octocat" 
+                        autocomplete="off"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input 
+                        type="number" 
+                        id="year" 
+                        min="2008" 
+                        max="2026" 
+                        value="2024"
+                        required
+                    >
+                    <small>Enter a single year (e.g., 2024) or leave for current year</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="token">Personal Access Token (Optional)</label>
+                    <input 
+                        type="password" 
+                        id="token" 
+                        placeholder="ghp_xxxxxxxxxxxx"
+                        autocomplete="off"
+                    >
+                    <small>Optional: Increases API rate limits. <a href="https://github.com/settings/tokens/new?scopes=&description=GitHub%20Skyline" target="_blank">Create token</a></small>
+                </div>
+
+                <button id="generate-btn" class="btn btn-primary">
+                    Generate Skyline
+                </button>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p id="loading-message">Initializing WASM module...</p>
+            </div>
+
+            <!-- ASCII Preview Section -->
+            <section id="ascii-section" class="ascii-section hidden">
+                <h2>ASCII Preview</h2>
+                <pre id="ascii-output" class="ascii-art"></pre>
+                <div class="legend">
+                    <h3>Legend</h3>
+                    <ul>
+                        <li><span class="legend-char">░</span> Low contributions</li>
+                        <li><span class="legend-char">▒</span> Medium contributions</li>
+                        <li><span class="legend-char">▓</span> High contributions</li>
+                        <li><span class="legend-char">╻┃╽</span> Top block of week</li>
+                        <li><span class="legend-char">.</span> Future dates</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Download Section -->
+            <section id="download-section" class="download-section hidden">
+                <h2>Download Your Skyline</h2>
+                <p id="stats"></p>
+                <button id="download-btn" class="btn btn-success">
+                    📥 Download STL File
+                </button>
+                <p class="info-text">
+                    Your STL file is ready for 3D printing! You can visualize it in 3D modeling software 
+                    or upload it to GitHub to view it directly in the browser.
+                </p>
+            </section>
+
+            <!-- Error Section -->
+            <div id="error" class="error hidden">
+                <span class="error-icon">⚠️</span>
+                <span id="error-message"></span>
+            </div>
+        </main>
+
+        <footer>
+            <p>
+                Built with ❤️ using WebAssembly | 
+                <a href="https://github.com/github/gh-skyline" target="_blank">View on GitHub</a> | 
+                <a href="https://cli.github.com/manual/gh_extension_install" target="_blank">Install CLI Extension</a>
+            </p>
+            <p class="rate-limit" id="rate-limit"></p>
+        </footer>
+    </div>
+
+    <!-- WASM Loader and Application Scripts -->
+    <script src="js/wasm_exec.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
