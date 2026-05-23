@@ -1,0 +1,75 @@
+---
+# .github/workflows/deploy-pages.yml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Sets permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
+        with:
+          go-version-file: go.mod
+
+      - name: Install TinyGo
+        run: |
+          wget https://github.com/tinygo-org/tinygo/releases/download/v0.31.2/tinygo_0.31.2_amd64.deb
+          sudo dpkg -i tinygo_0.31.2_amd64.deb
+          tinygo version
+
+      - name: Build WASM module
+        run: |
+          cd web/wasm
+          tinygo build -o ../build/skyline.wasm -target wasm ./
+          
+      - name: Copy WASM exec helper
+        run: |
+          TINYGO_ROOT=$(tinygo env TINYGOROOT)
+          cp "$TINYGO_ROOT/targets/wasm_exec.js" docs/js/
+
+      - name: Copy WASM binary to docs
+        run: |
+          mkdir -p docs/build
+          cp web/build/skyline.wasm docs/build/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@57e4d3f6c18bb3b72a1c68ede11ca5f1dd8b7bdf # v4.1.0
+        with:
+          path: ./docs
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d005a6e7a3d0f17e43f16eb48cf2716e0be97c5b # v4.0.7
