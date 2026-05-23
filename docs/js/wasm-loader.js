@@ -16,9 +16,24 @@ export async function loadWASM(wasmPath) {
     }
 
     try {
-        // Load the WebAssembly module
         const go = new Go();
-        const result = await WebAssembly.instantiateStreaming(fetch(wasmPath), go.importObject);
+        let result;
+        
+        // Try instantiateStreaming first (more efficient)
+        try {
+            result = await WebAssembly.instantiateStreaming(fetch(wasmPath), go.importObject);
+        } catch (streamError) {
+            console.warn('instantiateStreaming failed, falling back to fetch + instantiate:', streamError);
+            
+            // Fallback: fetch as ArrayBuffer then instantiate
+            // This works even if the MIME type is incorrect
+            const response = await fetch(wasmPath);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const wasmBytes = await response.arrayBuffer();
+            result = await WebAssembly.instantiate(wasmBytes, go.importObject);
+        }
         
         wasmInstance = result.instance;
         wasmModule = result.module;
