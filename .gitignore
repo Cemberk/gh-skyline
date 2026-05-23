@@ -32,3 +32,11 @@ go.work.sum
 
 # env file
 .env
+
+# Web/WASM build outputs
+web/build/*.wasm
+docs/build/*.wasm
+docs/js/wasm_exec.js
+
+# Temporary files
+*.tmp

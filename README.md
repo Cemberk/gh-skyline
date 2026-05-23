@@ -2,12 +2,17 @@
 
 A GitHub CLI extension that generates 3D-printable STL files of your GitHub contribution graph.
 
+## 🌐 Try It Online!
+
+**No installation required!** Try the [web version](https://cemberk.github.io/gh-skyline/) that runs entirely in your browser using WebAssembly.
+
 ## Features
 
 - Generate a Binary STL file from GitHub contribution data for 3D printing
 - Customizable year selection (single year and multi-year)
 - Automatic authentication via GitHub CLI or specify a user
 - ASCII art loading preview of contribution data unique to each user and year
+- **NEW**: Browser-based version with WebAssembly (no installation needed)
 
 | 3D Print                                                                                                   | ASCII Art                                                                                                                               |
 | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
@@ -119,6 +124,17 @@ The extension generates ASCII art in terminal while loading, a unique and fun wa
 - `'▒'` Medium level: Moderate contribution activity
 - `'▓'` High level: Heavy contribution activity
 - `'╻┃╽'` Top level: Last block with contributions in the week (Low, Medium, High)
+
+## Web Interface
+
+Prefer not to install the CLI? Use the [web version](https://cemberk.github.io/gh-skyline/) that runs entirely in your browser!
+
+- 🌐 No installation required
+- ⚡ Fast WebAssembly-powered generation
+- 🔒 All processing happens client-side
+- 📥 Download STL files directly
+
+See [web/README.md](web/README.md) for more details about the web interface.
 
 ## Visualizing your Skyline
 
