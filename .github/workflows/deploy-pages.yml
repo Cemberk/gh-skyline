@@ -41,12 +41,14 @@ jobs:
 
       - name: Build WASM module
         run: |
+          mkdir -p web/build
           cd web/wasm
           tinygo build -o ../build/skyline.wasm -target wasm ./
           
       - name: Copy WASM exec helper
         run: |
           TINYGO_ROOT=$(tinygo env TINYGOROOT)
+          mkdir -p docs/js
           cp "$TINYGO_ROOT/targets/wasm_exec.js" docs/js/
 
       - name: Copy WASM binary to docs
