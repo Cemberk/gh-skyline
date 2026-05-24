@@ -55,6 +55,8 @@ jobs:
         run: |
           mkdir -p docs/build
           cp web/build/skyline.wasm docs/build/
+          # Ensure .nojekyll exists to disable Jekyll processing
+          touch docs/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0

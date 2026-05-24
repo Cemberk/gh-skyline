@@ -43,7 +43,7 @@ async function init() {
     // Load WASM module
     try {
         showLoading('Loading WASM module...');
-        await loadWASM('../build/skyline.wasm');
+        await loadWASM('./build/skyline.wasm');
         hideLoading();
         console.log('WASM module ready');
     } catch (error) {
